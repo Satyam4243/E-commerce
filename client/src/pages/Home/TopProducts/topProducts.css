@@ -1,0 +1,60 @@
+
+.topSelling_box .items{
+    padding: 20px 0px;
+    position: relative;
+    transition: all 0.3s ease-in-out;
+}
+
+.topSelling_box .items .img {
+    width: 45%;
+    background-image: #ccc;
+}
+
+.topSelling_box .items .info {
+    width: 80%;
+}
+
+.topSelling_box .items .info h4 {
+    font-weight: 600 !important;
+    opacity: 0.8;
+    font-size: 22px !important;
+}
+
+.topSelling_box .items .info a {
+    text-decoration: none;
+    color: #000;
+}
+
+.topSelling_box .items:hover{
+    transform: translateY(-10px);
+}
+
+.tpHeader {
+    text-align: left;
+    margin-bottom: 10px;
+}
+
+.tpHeader h3 {
+    font-size: 30px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.tpUnderline {
+    width: 100%;
+    height: 4px;
+    background: #e2e2e2;     
+    position: relative;
+    border-radius: 3px;
+}
+
+.tpUnderline::before {
+    content: "";
+    width: 40%;                  
+    height: 100%;
+    background: #3bb77e;        
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    border-radius: 3px;
+}

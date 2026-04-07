@@ -1,0 +1,172 @@
+.productThumb {
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 15px;
+  padding: 25px;
+  transition: all 0.3s ease-in-out;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.productThumb .badge {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  display: inline-block;
+  background: red;
+  z-index: 10;
+  color: #fff;
+  padding: 10px 25px;
+  font-size: 16px;
+  border-bottom-right-radius: 50px;
+  border-top-left-radius: 5px;
+  text-transform: capitalize;
+}
+
+.productThumb .bottom {
+  margin-top: auto;
+}
+
+.productThumb .badge.hot {
+  background: #f74b81 !important;
+}
+
+.productThumb .badge.sale {
+  background: #67bcee !important;
+}
+
+.productThumb .badge.new {
+  background: #3bb77e !important;
+}
+
+.productThumb .badge.best {
+  background: #f59758 !important;
+}
+
+.productThumb .imgWrapper {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.productThumb .imgWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease-in-out;
+}
+
+.productThumb .imgWrapper .overlay {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.productThumb:hover .imgWrapper .overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.productThumb .imgWrapper .overlay ul {
+  background: #fff;
+  width: 140px;
+  height: auto;
+  border-radius: 10px;
+  border: 1px solid #bce3c9;
+}
+
+.productThumb .imgWrapper .overlay ul li {
+  margin-right: 0px !important;
+}
+
+.productThumb .imgWrapper .overlay ul li a {
+  display: block;
+  padding: 10px;
+  border-right: 1px solid #bce3c9;
+}
+
+.productThumb .imgWrapper .overlay ul li a svg {
+  color: #3bb77e !important;
+}
+
+.productThumb .imgWrapper .overlay ul li a:hover svg {
+  color: #000 !important;
+  opacity: 0.7;
+}
+
+.productThumb:hover .imgWrapper img {
+  transform: scale(1.1);
+}
+
+.productThumb .catName {
+  color: #000;
+  opacity: 0.8;
+  font-size: 14px;
+}
+
+.productThumb .title {
+  margin: 10px 0px;
+}
+
+.productThumb .title a {
+  color: #000;
+  font-weight: 600;
+  font-size: 22px;
+  text-decoration: none;
+  line-height: 22px;
+}
+
+.productThumb .brand {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.productThumb .brand a {
+  text-decoration: none;
+}
+
+.productThumb button {
+  margin-left: auto;
+  font-size: 20px !important;
+  color: #3bb77e !important;
+  padding: 5px 40px !important;
+  background: #def9ec !important;
+  text-transform: capitalize !important;
+}
+
+.productThumb button:hover {
+  background: #3bb77e !important;
+  color: #fff !important;
+}
+
+.productThumb .overlay ul {
+  display: flex;
+  justify-content: center;
+  gap: 15px; /* ✅ equal spacing */
+}
+
+.productThumb .overlay ul li {
+  list-style: none;
+}
+.productThumb .btn {
+  background: #3bb77e;
+  color: #fff;
+  border-radius: 5px;
+  padding: 6px 12px;
+  transition: 0.3s;
+}
+
+.productThumb .btn:hover {
+  background: #2a9d6f;
+}

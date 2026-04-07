@@ -1,0 +1,16 @@
+import React from 'react';
+
+
+const UserAvatarImgComponent = (props) => {
+    return (
+        <div>
+            <div className={`userImg ${props.lg===true && 'lg'}`}>
+                <span className='rounded-circle'>
+                    <img src={props.img} />
+                </span>
+            </div>
+        </div>
+    )
+}
+
+export default UserAvatarImgComponent;
