@@ -190,6 +190,7 @@ const Listing = () => {
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
+  const searchQuery = queryParams.get("q");
 
   const minPrice = queryParams.get("minPrice");
   const maxPrice = queryParams.get("maxPrice");
@@ -207,58 +208,115 @@ const Listing = () => {
 
   // ================= FETCH PRODUCTS =================
   useEffect(() => {
-    let url = `/api/products?page=${page}&limit=${limit}`;
+    // let url = `/api/products?page=${page}&limit=${limit}`;
 
-    // CATEGORY
-    if (id) {
-      url += `&category=${id}`;
+    // // CATEGORY
+    // if (id) {
+    //   url += `&category=${id}`;
+    // }
+
+    // // SUB CATEGORY
+    // if (subCategory) {
+    //   url += `&subCategory=${subCategory}`;
+    // }
+
+    // // PRICE FILTER
+    // if (minPrice && maxPrice) {
+    //   url += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+    // }
+
+    // // RATING FILTER
+    // if (rating) {
+    //   url += `&rating=${rating}`;
+    // }
+    let url = "";
+
+    if (searchQuery) {
+      url = `/api/products/search?q=${searchQuery}`;
+    } else {
+      url = `/api/products?page=${page}&limit=${limit}`;
+
+      if (id) {
+        url += `&category=${id}`;
+      }
+
+      if (subCategory) {
+        url += `&subCategory=${subCategory}`;
+      }
+
+      if (minPrice && maxPrice) {
+        url += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
+      }
+
+      if (rating) {
+        url += `&rating=${rating}`;
+      }
     }
 
-    // SUB CATEGORY
-    if (subCategory) {
-      url += `&subCategory=${subCategory}`;
-    }
+    // fetchDataFromApi(url).then((res) => {
+    //   if (res?.products) {
+    //     let fetchedProducts = res.products;
 
-    // PRICE FILTER
-    if (minPrice && maxPrice) {
-      url += `&minPrice=${minPrice}&maxPrice=${maxPrice}`;
-    }
+    //     // CLIENT SIDE SORTING
+    //     if (sort === "low") {
+    //       fetchedProducts = [...fetchedProducts].sort(
+    //         (a, b) => a.price - b.price,
+    //       );
+    //     }
 
-    // RATING FILTER
-    if (rating) {
-      url += `&rating=${rating}`;
-    }
+    //     if (sort === "high") {
+    //       fetchedProducts = [...fetchedProducts].sort(
+    //         (a, b) => b.price - a.price,
+    //       );
+    //     }
 
+    //     // setProducts(fetchedProducts);
+    //     // setTotalProducts(res.totalProducts);
+    //     setProducts(fetchedProducts);
+    //     setTotalProducts(fetchedProducts.length);
+    //   }
+    // });
+   
     fetchDataFromApi(url).then((res) => {
-      if (res?.products) {
-        let fetchedProducts = res.products;
+      const fetchedProducts = res?.products || [];
 
+      if (fetchedProducts.length > 0) {
         // CLIENT SIDE SORTING
         if (sort === "low") {
-          fetchedProducts = [...fetchedProducts].sort(
-            (a, b) => a.price - b.price
-          );
+          fetchedProducts.sort((a, b) => a.price - b.price);
         }
 
         if (sort === "high") {
-          fetchedProducts = [...fetchedProducts].sort(
-            (a, b) => b.price - a.price
-          );
+          fetchedProducts.sort((a, b) => b.price - a.price);
         }
 
         setProducts(fetchedProducts);
-        setTotalProducts(res.totalProducts);
+        setTotalProducts(fetchedProducts.length);
+      } else {
+        setProducts([]);
+        setTotalProducts(0);
       }
     });
-
-  }, [id, page, limit, sort, minPrice, maxPrice, subCategory, rating]);
+  }, [
+    id,
+    page,
+    limit,
+    sort,
+    minPrice,
+    maxPrice,
+    subCategory,
+    rating,
+    searchQuery,
+  ]);
 
   return (
     <section className="listingPage">
       <div className="container-fluid">
-
         <div className="breadcrumb flex-column">
-          <h1>Products</h1>
+          {/* <h1>Products</h1> */}
+          <h1>
+            {searchQuery ? `Search Results for "${searchQuery}"` : "Products"}
+          </h1>
           <ul className="list list-inline mb-0">
             <li className="list-inline-item">
               <Link to="/">Home</Link>
@@ -274,21 +332,19 @@ const Listing = () => {
 
         <div className="listingData">
           <div className="row">
-
             <div className="col-md-3 sidebarWrapper">
               <Sidebar />
             </div>
 
             <div className="col-md-9 rightContent homeProducts pt-0">
-
               {/* TOP STRIP */}
               <div className="topStrip d-flex align-items-center">
                 <p className="mb-0">
-                  We Found <span className="text-success">{totalProducts}</span> items for you!
+                  We Found <span className="text-success">{totalProducts}</span>{" "}
+                  items for you!
                 </p>
 
                 <div className="ms-auto d-flex align-items-center gap-1">
-
                   {/* SHOW LIMIT */}
                   <div className="tab_ position-relative">
                     <Button
@@ -329,24 +385,38 @@ const Listing = () => {
                     {isOpenDropDown2 && (
                       <ul className="dropdownMenu">
                         <li>
-                          <Button onClick={() => { setSort("latest"); setisOpenDropDown2(false); }}>
+                          <Button
+                            onClick={() => {
+                              setSort("latest");
+                              setisOpenDropDown2(false);
+                            }}
+                          >
                             Latest
                           </Button>
                         </li>
                         <li>
-                          <Button onClick={() => { setSort("low"); setisOpenDropDown2(false); }}>
+                          <Button
+                            onClick={() => {
+                              setSort("low");
+                              setisOpenDropDown2(false);
+                            }}
+                          >
                             Price: Low to High
                           </Button>
                         </li>
                         <li>
-                          <Button onClick={() => { setSort("high"); setisOpenDropDown2(false); }}>
+                          <Button
+                            onClick={() => {
+                              setSort("high");
+                              setisOpenDropDown2(false);
+                            }}
+                          >
                             Price: High to Low
                           </Button>
                         </li>
                       </ul>
                     )}
                   </div>
-
                 </div>
               </div>
 
@@ -378,7 +448,6 @@ const Listing = () => {
                   Next
                 </Button>
               </div>
-
             </div>
           </div>
         </div>
@@ -388,4 +457,3 @@ const Listing = () => {
 };
 
 export default Listing;
-

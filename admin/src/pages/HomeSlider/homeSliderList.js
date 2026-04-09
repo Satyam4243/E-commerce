@@ -138,33 +138,34 @@ const HomeSliderList = () => {
                         {...provided.dragHandleProps}
                       >
                         <div className="card p-2">
+                          {/* {slide.images.map((img, index) => ( */}
+                          {slide.images?.length > 0 &&
+                            slide.images.map((img, index) => (
+                              <div key={index}>
+                                <img
+                                  src={`http://localhost:8000/uploads/${img}`}
+                                  alt="slide"
+                                  className="w-100"
+                                  style={{
+                                    height: "200px",
+                                    objectFit: "cover",
+                                    borderRadius: "8px",
+                                  }}
+                                />
 
-                          {slide.images.map((img, index) => (
-                            <div key={index}>
-                              <img
-                                src={`http://localhost:8000/uploads/${img}`}
-                                alt="slide"
-                                className="w-100"
-                                style={{
-                                  height: "200px",
-                                  objectFit: "cover",
-                                  borderRadius: "8px",
-                                }}
-                              />
-
-                              <Button
-                                variant="outlined"
-                                color="error"
-                                size="small"
-                                className="mt-2"
-                                onClick={() =>
-                                  handleDeleteSingleImage(slide._id, img)
-                                }
-                              >
-                                <DeleteIcon /> &nbsp; Delete Image
-                              </Button>
-                            </div>
-                          ))}
+                                <Button
+                                  variant="outlined"
+                                  color="error"
+                                  size="small"
+                                  className="mt-2"
+                                  onClick={() =>
+                                    handleDeleteSingleImage(slide._id, img)
+                                  }
+                                >
+                                  <DeleteIcon /> &nbsp; Delete Image
+                                </Button>
+                              </div>
+                            ))}
 
                           {/* ACTIVE SWITCH */}
                           <div className="mt-2">
@@ -172,17 +173,11 @@ const HomeSliderList = () => {
                               control={
                                 <Switch
                                   checked={slide.isActive}
-                                  onChange={() =>
-                                    handleToggle(slide._id)
-                                  }
+                                  onChange={() => handleToggle(slide._id)}
                                   color="success"
                                 />
                               }
-                              label={
-                                slide.isActive
-                                  ? "Active"
-                                  : "Inactive"
-                              }
+                              label={slide.isActive ? "Active" : "Inactive"}
                             />
                           </div>
 
@@ -192,9 +187,7 @@ const HomeSliderList = () => {
                               variant="contained"
                               color="primary"
                               onClick={() =>
-                                navigate(
-                                  `/homeSlider/edit/${slide._id}`
-                                )
+                                navigate(`/homeSlider/edit/${slide._id}`)
                               }
                             >
                               <EditIcon /> &nbsp; Edit
@@ -203,14 +196,11 @@ const HomeSliderList = () => {
                             <Button
                               variant="contained"
                               color="error"
-                              onClick={() =>
-                                handleDelete(slide._id)
-                              }
+                              onClick={() => handleDelete(slide._id)}
                             >
                               Delete Slide
                             </Button>
                           </div>
-
                         </div>
                       </div>
                     )}

@@ -752,6 +752,8 @@
 // export default DetailsPage;
 
 import React, { useState, useEffect } from "react";
+import "./details.css";
+
 import { useParams } from "react-router-dom";
 import { fetchDataFromApi } from "../../utils/api";
 
@@ -772,6 +774,8 @@ import { postData } from "../../utils/api.js";
 import { useContext } from "react";
 import { MyContext } from "../../App.js";
 
+import { Link } from "react-router-dom";
+
 const DetailsPage = () => {
   const { id } = useParams();
 
@@ -781,6 +785,21 @@ const DetailsPage = () => {
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [zoomImage, setZoomImage] = useState("");
   const [activeThumb, setActiveThumb] = useState(0);
+
+  const [reviews, setReviews] = useState([]);
+  const [reviewForm, setReviewForm] = useState({
+    userName: "",
+    rating: 1,
+    comment: "",
+  });
+
+  useEffect(() => {
+    fetchDataFromApi(`/api/products/reviews/${id}`).then((res) => {
+      if (res?.reviews) {
+        setReviews(res.reviews);
+      }
+    });
+  }, [id]);
 
   // ================= SCROLL TO TOP =================
   useEffect(() => {
@@ -871,8 +890,76 @@ const DetailsPage = () => {
     }
   };
 
+  const handleReviewChange = (e) => {
+    const { name, value } = e.target;
+    setReviewForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+      alert("Please login first");
+      return;
+    }
+
+    try {
+      const res = await postData(`/api/products/addReview/${id}`, {
+        userName: user.name || "User",
+        rating: reviewForm.rating,
+        comment: reviewForm.comment,
+      });
+
+      if (res?.success) {
+        alert("Review added ✅");
+
+        setReviewForm({
+          userName: "",
+          rating: 1,
+          comment: "",
+        });
+
+        setReviews(res.reviews);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <section className="detailsPage mb-5">
+      <div className="breadcrumbWrapper mb-4">
+        <div className="container-fluid">
+          <ul className="breadcrumb breadcrumb2 mb-0">
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+
+            {product?.category && (
+              <li>
+                <Link to={`/category/${product.category._id}`}>
+                  {product.category.name}
+                </Link>
+              </li>
+            )}
+
+            {product?.subCategory && (
+              <li>
+                <Link to={`/category/subCat/${product.subCategory._id}`}>
+                  {product.subCategory.name}
+                </Link>
+              </li>
+            )}
+
+            <li>{product?.name}</li>
+          </ul>
+        </div>
+      </div>
       <div className="container detailsContainer pt-3 pb-3">
         <div className="row">
           {/* LEFT IMAGE SECTION */}
@@ -940,7 +1027,10 @@ const DetailsPage = () => {
               <QuantityBox />
 
               <div className="d-flex align-items-center gap-3 ms-3">
-                <Button className="btn-g btn-lg addtocartbtn" onClick={handleAddToCart}>
+                <Button
+                  className="btn-g btn-lg addtocartbtn"
+                  onClick={handleAddToCart}
+                >
                   <ShoppingCartOutlinedIcon className="me-1" />
                   Add To Cart
                 </Button>
@@ -954,6 +1044,50 @@ const DetailsPage = () => {
                 </Button>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* REVIEWS SECTION */}
+        <div className="reviewsSection mt-5">
+          <h3>Customer Reviews</h3>
+
+          {/* REVIEW FORM */}
+          <form onSubmit={handleReviewSubmit} className="reviewForm mt-3">
+            <div className="mb-2">
+              <Rating
+                value={reviewForm.rating}
+                onChange={(e, newValue) =>
+                  setReviewForm({ ...reviewForm, rating: newValue })
+                }
+              />
+            </div>
+
+            <textarea
+              name="comment"
+              value={reviewForm.comment}
+              onChange={handleReviewChange}
+              placeholder="Write your review..."
+              className="form-control mb-2"
+              required
+            />
+
+            <Button type="submit" className="btn-blue">
+              Submit Review
+            </Button>
+          </form>
+
+          {/* REVIEW LIST */}
+          <div className="reviewList mt-4">
+            {reviews.length === 0 && <p>No reviews yet</p>}
+
+            {reviews.map((rev, index) => (
+              <div key={index} className="reviewItem mb-3">
+                <h6>{rev.userName}</h6>
+                <Rating value={rev.rating} readOnly size="small" />
+                <p>{rev.comment}</p>
+                <small>{new Date(rev.date).toLocaleDateString()}</small>
+              </div>
+            ))}
           </div>
         </div>
 

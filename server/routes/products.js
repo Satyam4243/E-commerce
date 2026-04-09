@@ -240,4 +240,98 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+// ================= ADD REVIEW =================
+router.post("/addReview/:id", async (req, res) => {
+  try {
+    const { userName, rating, comment } = req.body;
+
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    const newReview = {
+      userName,
+      rating,
+      comment,
+    };
+
+    product.reviews.push(newReview);
+
+    // 🔥 update average rating
+    const totalRatings = product.reviews.reduce(
+      (acc, item) => acc + item.rating,
+      0,
+    );
+
+    product.rating = totalRatings / product.reviews.length;
+
+    await product.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Review added successfully",
+      reviews: product.reviews,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+// ================= GET REVIEWS =================
+router.get("/reviews/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      reviews: product.reviews,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
+// ================= SEARCH PRODUCTS =================
+router.get("/search", async (req, res) => {
+  try {
+    const query = req.query.q;
+
+    const products = await Product.find({
+      $or: [
+        { name: { $regex: query, $options: "i" } },
+        { brand: { $regex: query, $options: "i" } },
+        { catName: { $regex: query, $options: "i" } },
+      ],
+    }).limit(10);
+
+    res.status(200).json({
+      success: true,
+      products,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+});
+
 module.exports = router;

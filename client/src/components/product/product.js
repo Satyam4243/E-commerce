@@ -13,13 +13,49 @@ import Tooltip from "@mui/material/Tooltip";
 import { postData } from "../../utils/api";
 import { MyContext } from "../../App";
 import { useState } from "react";
+import { useEffect } from "react";
+// import { fetchDataFromApi } from "../../utils/api";
 
 const Product = (props) => {
   const { item, tag } = props;
   const context = useContext(MyContext);
 
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  // const [isWishlisted, setIsWishlisted] = useState(false);
+
   const [isCompared, setIsCompared] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(false);
+
+  // useEffect(() => {
+  //   const user = JSON.parse(localStorage.getItem("user"));
+
+  //   if (!user || !item?._id) return;
+
+  //   fetchDataFromApi(`/api/wishlist/${user._id || user.id || user.uid}`).then(
+  //     (res) => {
+  //       if (res?.items) {
+  //         const exists = res.items.some(
+  //           (wish) => wish.productId._id === item._id,
+  //         );
+
+  //         setIsWishlisted(exists);
+  //       }
+  //     },
+  //   );
+  // }, [item]);
+
+
+
+  // const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    if (!context.wishlistItems || !item?._id) return;
+
+    const exists = context.wishlistItems.some(
+      (wish) => wish.productId._id === item._id,
+    );
+
+    setIsWishlisted(exists);
+  }, [context.wishlistItems, item]);
 
   if (!item) return null;
 
@@ -114,6 +150,105 @@ const Product = (props) => {
     }
   };
 
+  // const handleWishlist = async () => {
+  //   const user = JSON.parse(localStorage.getItem("user"));
+
+  //   if (!user) {
+  //     context.setAlertBox({
+  //       open: true,
+  //       error: true,
+  //       msg: "Please login first!",
+  //     });
+  //     return;
+  //   }
+
+  //   try {
+  //     if (!isWishlisted) {
+  //       // ADD TO WISHLIST
+  //       const res = await postData("/api/wishlist", {
+  //         productId: item._id,
+  //         userId: user._id || user.id || user.uid,
+  //       });
+
+  //       if (res?.success) {
+  //         setIsWishlisted(true);
+
+  //         context.setAlertBox({
+  //           open: true,
+  //           error: false,
+  //           msg: "Added to Wishlist ❤️",
+  //         });
+  //       }
+  //     } else {
+  //       // REMOVE FROM WISHLIST
+  //       const res = await postData("/api/wishlist/remove", {
+  //         productId: item._id,
+  //         userId: user._id || user.id || user.uid,
+  //       });
+
+  //       if (res?.success) {
+  //         setIsWishlisted(false);
+
+  //         context.setAlertBox({
+  //           open: true,
+  //           error: false,
+  //           msg: "Removed from Wishlist ❌",
+  //         });
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  const handleWishlist = async () => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (!user) {
+      context.setAlertBox({
+        open: true,
+        error: true,
+        msg: "Please login first!",
+      });
+      return;
+    }
+
+    try {
+      if (!isWishlisted) {
+        const res = await postData("/api/wishlist", {
+          productId: item._id,
+          userId: user._id || user.id || user.uid,
+        });
+
+        if (res?.success) {
+          context.setAlertBox({
+            open: true,
+            error: false,
+            msg: "Added to Wishlist ❤️",
+          });
+
+          context.loadWishlist(); // 🔥 IMPORTANT
+        }
+      } else {
+        const res = await postData("/api/wishlist/remove", {
+          productId: item._id,
+          userId: user._id || user.id || user.uid,
+        });
+
+        if (res?.success) {
+          context.setAlertBox({
+            open: true,
+            error: false,
+            msg: "Removed from Wishlist ❌",
+          });
+
+          context.loadWishlist(); // 🔥 IMPORTANT
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="productThumb">
       {tag && <span className={`badge ${tag}`}>{tag}</span>}
@@ -127,7 +262,8 @@ const Product = (props) => {
           <img
             src={
               item?.images?.length > 0
-                ? `${process.env.REACT_APP_BASE_URL}/uploads/${item.images[0]}`
+                ? // ? `${process.env.REACT_APP_BASE_URL}/uploads/${item.images[0]}`
+                  `http://localhost:8000/uploads/${item.images[0]}`
                 : "https://via.placeholder.com/300"
             }
             className="w-100"
@@ -140,10 +276,12 @@ const Product = (props) => {
                 <Tooltip title="Add to Wishlist" placement="top" arrow>
                   <span
                     className="cursor"
-                    onClick={() => setIsWishlisted(!isWishlisted)}
+                    // onClick={() => setIsWishlisted(!isWishlisted)}
+                    onClick={handleWishlist}
                   >
                     <FavoriteBorderOutlinedIcon
-                      style={{ color: isWishlisted ? "red" : "#000" }}
+                      // style={{ color: isWishlisted ? "red" : "#000" }}
+                      style={{ color: isWishlisted ? "#ff3d00" : "#000" }}
                     />
                   </span>
                 </Tooltip>

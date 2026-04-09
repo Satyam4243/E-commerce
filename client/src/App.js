@@ -17,6 +17,9 @@ import { createContext, useEffect, useState } from "react";
 import axios from "axios";
 import Loader from "../src/assets/images/loading.gif";
 import { fetchDataFromApi } from "./utils/api.js";
+import Wishlist from "./pages/Wishlist/wishlist.js";
+import { useCallback } from "react";
+import Checkout from "./pages/Checkout/checkout.js";
 
 export const MyContext = createContext();
 
@@ -40,6 +43,37 @@ function App() {
 
   const [isOpenFilters, setIsopenFilters] = useState(false);
   const [cartTotalAmount, setCartTotalAmount] = useState();
+
+  const [wishlistItems, setWishlistItems] = useState([]);
+
+  // const loadWishlist = async () => {
+  //   const user = JSON.parse(localStorage.getItem("user"));
+  //   if (!user) return;
+
+  //   const res = await fetchDataFromApi(
+  //     `/api/wishlist/${user._id || user.id || user.uid}`,
+  //   );
+
+  //   if (res?.items) {
+  //     setWishlistItems(res.items);
+  //   }
+  // };
+
+
+
+const loadWishlist = useCallback(async () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user) return;
+
+  const res = await fetchDataFromApi(
+    `/api/wishlist/${user._id || user.id || user.uid}`
+  );
+
+  if (res?.items) {
+    setWishlistItems(res.items);
+  }
+}, []);
 
   const [alertBox, setAlertBox] = useState({
     open: false,
@@ -230,6 +264,10 @@ function App() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    loadWishlist();
+  }, [loadWishlist]);
   /* ================= CONTEXT VALUE ================= */
   const value = {
     isLogin,
@@ -254,6 +292,9 @@ function App() {
     getCartCount,
     setAlertBox,
     alertBox,
+    wishlistItems,
+    setWishlistItems,
+    loadWishlist,
   };
 
   return (
@@ -304,6 +345,8 @@ function App() {
 
               <Route path="/signup" element={<SignUp />} />
               <Route path="/signin" element={<SignIn />} />
+              <Route path="/wishlist" element={<Wishlist />} />
+              <Route path="/checkout" element={<Checkout />} />
             </Routes>
 
             <Footer />

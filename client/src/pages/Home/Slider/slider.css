@@ -1,25 +1,84 @@
+/* ===================== SLIDER WRAPPER ===================== */
+
 .homeSlider {
-  padding: 30px 0px;
+  width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-.home_Slider_main {
-  border-radius: 20px;
+.sliderWrapper {
+  width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+  position: relative;
+}
+
+.home_slider_main {
+  width: 100%;
+  margin: 0 !important;
+}
+
+/* ===================== SLIDER ITEM ===================== */
+
+/* .home_slider_main .item {
+  width: 100%;
+  height: 550px;
+  height: auto;
+  overflow: hidden;
+  position: relative;
+} */
+
+/* .home_slider_main .item img {
+  width: 100%;
+  height: 100%;
+  height: auto;
+  object-fit: cover;  
+  object-fit: contain;
+  display: block;
+} */
+
+.home_slider_main .item {
+  width: 100%;
+  /* height: 500px; */
+  height: 1000px;
+   /* aspect-ratio: 16 / 5; */
   overflow: hidden;
   position: relative;
 }
 
-/* .home_Slider_main img2{
+.home_slider_main .item img {
   width: 100%;
-  height: 50%;
-  object-fit: cover;   
-  display: block;
-} */
+  /* height: 100%; */
+  height: auto;
+  /* object-fit: contain;    */
+  object-fit: cover;
+  /* background: #fff; */
+  /* display: block; */
+  position: relative;
+  z-index: 2;
+}
+
+/* ===================== REMOVE SIDE GAP ===================== */
+
+.slick-list {
+  padding: 0 !important;
+}
+
+.slick-track {
+  display: flex !important;
+}
+
+.slick-slide {
+  display: block !important;
+}
+
+/* ===================== ARROWS ===================== */
 
 .slick-arrow {
   position: absolute;
-  top: 47%;
-  width: 60px !important;
-  height: 60px !important;
+  top: 45%;
+  width: 55px !important;
+  height: 55px !important;
   border-radius: 50% !important;
   background: #f2f3f4;
   z-index: 1000 !important;
@@ -30,24 +89,24 @@
 }
 
 .slick-arrow.slick-next {
-  right: 2% !important;
+  right: 20px !important;
 }
 
 .slick-arrow.slick-prev {
-  left: 1% !important;
+  left: 20px !important;
 }
 
 .slick-prev:before {
   content: "\f104" !important;
   font-family: FontAwesome !important;
-  font-size: 30px !important;
+  font-size: 28px !important;
   color: #000 !important;
 }
 
 .slick-next:before {
   content: "\f105" !important;
   font-family: FontAwesome !important;
-  font-size: 30px !important;
+  font-size: 28px !important;
   color: #000 !important;
 }
 
@@ -59,70 +118,68 @@
   color: #fff !important;
 }
 
+/* ===================== DOTS ===================== */
+
 .home_slider_main .slick-dots {
   position: absolute;
-  bottom: 30px !important;
+  bottom: 20px !important;
 }
 
 .home_slider_main .slick-dots button::before {
-  width: 10px !important;
-  height: 10px !important;
-  font-size: 18px !important;
+  font-size: 12px !important;
 }
 
 .slick-active button::before {
   color: #3bb77e !important;
 }
 
-.home_slider_main .item {
-  position: relative;
-}
-
-/* .home_slider_main .item {
-  position: relative;
-  width: 100%;
-  height: 700px; 
-  overflow: hidden;
-}
-
-.home_slider_main .item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; 
-  display: block;
-}
-
-.home_Slider_Main .item{
-    position: relative;
-} */
+/* ===================== TEXT OVERLAY ===================== */
 
 .home_slider_main .item .info {
   position: absolute;
   top: 15%;
   left: 7%;
-  z-index: 100;
+  z-index: 10;
 }
 
 .home_slider_main .item .info h2 {
-  font-size: 90px;
-  font-weight: bolder;
+  font-size: 60px;
+  font-weight: bold;
   color: rgba(0, 0, 0, 0.7);
 }
 
 .home_slider_main .item .info p {
-  font-size: 35px;
-  font-weight: 500;
-  color: #7e7e7e;
+  font-size: 22px;
+  color: #666;
 }
 
-.slider img {
-  width: 100%;
-  height: 400px; /* fixed height */
-  object-fit: cover; /* 🔥 IMPORTANT */
+/* ===================== NEWSLETTER FIX ===================== */
+
+.newsletter {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
 }
 
-.slick-slide {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
+/* ===================== RESPONSIVE ===================== */
+
+@media (max-width: 768px) {
+  .home_slider_main .item {
+    height: 300px;
+  }
+
+  .home_slider_main .item .info h2 {
+    font-size: 28px;
+  }
+
+  .home_slider_main .item .info p {
+    font-size: 14px;
+  }
+
+  .slick-arrow {
+    width: 40px !important;
+    height: 40px !important;
+  }
 }

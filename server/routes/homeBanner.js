@@ -127,9 +127,18 @@ router.get("/:id", async (req, res) => {
 // ================= CREATE NEW SLIDE =================
 router.post("/", async (req, res) => {
   try {
+    // const banner = new HomeBanner({
+    //   images: req.body.images,
+    //   // isActive: req.body.isActive !== undefined ? req.body.is.Active : true,
+    //   isActive: req.body.isActive !== undefined ? req.body.isActive : true,
+    // });
+
     const banner = new HomeBanner({
       images: req.body.images,
-      isActive: req.body.isActive !== undefined ? req.body.is.Active : true,
+      isActive: req.body.isActive !== undefined ? req.body.isActive : true,
+      order: req.body.order || 0,
+      startDate: req.body.startDate || null,
+      endDate: req.body.endDate || null,
     });
 
     const savedBanner = await banner.save();

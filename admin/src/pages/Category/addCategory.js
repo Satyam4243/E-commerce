@@ -69,19 +69,7 @@ const AddCategory = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
 
-    // fetchDataFromApi("/api/imageUpload").then((res) => {
-    //     res?.data?.items?.forEach((item) => {
-    //         item?.images?.forEach((img) => {
-    //             deleteImages(`/api/category/deleteImage?img=${img}`).then((res) => {
-    //                 deleteData("/api/imageUpload/deleteAllImages");
-    //             })
-    //         })
-    //     })
-    // })
-
-    // useEffect(() => {
-    //   window.scrollTo(0, 0);
-    // }, []);
+   
   }, []);
 
   const changeInput = (e) => {
@@ -91,75 +79,7 @@ const AddCategory = () => {
     }));
   };
 
-  //   let img_arr = [];
-  //   let uniqueArray = [];
-  //   let selectedImages = [];
-
-  //   const onChangeFile = async (e, apiEndPoint) => {
-  //     const formData = new FormData();
-  //     try {
-  //       const files = e.target.files;
-
-  //       setUploading(true);
-
-  //       for (var i = 0; i < files.length; i++) {
-  //         if (
-  //           files[i] &&
-  //           (files[i].type === "image/jpeg" ||
-  //             files[i].type === "image/jpg" ||
-  //             files[i].type === "image/png" ||
-  //             files[i].type === "image/webp")
-  //         ) {
-  //           const file = files[i];
-  //           selectedImages.push(file);
-  //           formData.append(`images`, file);
-  //         } else {
-  //           context.setAlertBox({
-  //             open: true,
-  //             error: true,
-  //             msg: "Please select a valid JPG or PNG image file.",
-  //           });
-  //           return false;
-  //         }
-  //       }
-
-  //       setFormFields((prev) => ({
-  //         ...prev,
-  //         images: selectedImages,
-  //       }));
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //     uploadImage(apiEndPoint, formData).then(() => {
-  //       fetchDataFromApi("/api/imageUpload").then((response) => {
-  //         const data = response?.data; //
-
-  //         if (Array.isArray(data) && data.length > 0) {
-  //           let img_arr = [];
-
-  //           data.forEach((item) => {
-  //             if (Array.isArray(item.images)) {
-  //               item.images.forEach((img) => {
-  //                 img_arr.push(img);
-  //               });
-  //             }
-  //           });
-
-  //           // remove duplicates
-  //           const uniqueArray = [...new Set(img_arr)];
-
-  //           setPreviews((prev) => [...prev, ...uniqueArray]);
-
-  //           setUploading(false);
-
-  //           context.setAlertBox({
-  //             open: true,
-  //             error: false,
-  //             msg: "Images Uploaded Successfully!",
-  //           });
-  //         }
-  //       });
-  //     });
+  
 
   const onChangeFile = async (e, apiEndPoint) => {
     if (isLoading || uploading) return;
@@ -209,38 +129,7 @@ const AddCategory = () => {
     }
   };
 
-  // uploadImage(apiEndPoint, formData).then((res) => {
-
-  //     fetchDataFromApi("/api/imageUpload").then((response) => {
-  //         const data = Array.isArray(response) ? response : response?.data;
-
-  //         if (data?.length !== 0) {
-  //             data.forEach((item) => {
-  //                 item?.images?.length !== 0
-  //                     && item?.images?.forEach((img) => {
-  //                         img_arr.push(img)
-  //                         //console.log(img)
-  //                     })
-  //             })
-
-  //             uniqueArray = img_arr.filter((item, index) => img_arr.indexOf(item) === index);
-
-  //             const appendedArray = [...previews, ...uniqueArray];
-
-  //             setPreviews(appendedArray);
-  //             setTimeout(() => {
-  //                 setUploading(false);
-  //                 img_arr = [];
-  //                 context.setAlertBox({
-  //                     open: true,
-  //                     error: false,
-  //                     msg: "images Uploaded!"
-  //                 })
-  //             }, 200);
-  //         }
-  //     });
-  // });
-  //   };
+  
 
   const removeImg = async (index, imgUrl) => {
     const imgIndex = previews.indexOf(imgUrl);
@@ -292,44 +181,7 @@ const AddCategory = () => {
     history("/category");
   };
 
-  //   const addCat = (e) => {
-  //     e.preventDefault();
-
-  //     const appendedArray = [...previews, ...uniqueArray];
-
-  //     img_arr = [];
-
-  //     // setFormFields((prev) => ({
-  //     //   ...prev,
-  //     //   slug: prev.name,
-  //     //   images: appendedArray,
-  //     // }));
-
-  //     if (
-  //       formFields.name !== "" &&
-  //       formFields.color !== "" &&
-  //       previews.length !== 0
-  //     ) {
-  //       setIsLoading(true);
-
-  //       postData(`/api/category/create`, formFields).then((res) => {
-  //         setIsLoading(false);
-  //         context.fetchCategory();
-
-  //         deleteData("/api/imageUpload/deleteAllImages");
-
-  //         history("/category");
-  //       });
-  //     } else {
-  //       context.setAlertBox({
-  //         open: true,
-  //         error: true,
-  //         msg: "Please fill all the details",
-  //       });
-  //       return false;
-  //     }
-  //   };
-
+  
   return (
     <div className="right-content w-100">
       <div className="card shadow border-0 w-100 flex-row p-4 m-2">

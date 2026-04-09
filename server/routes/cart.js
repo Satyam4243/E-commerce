@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
     if (product.countInStock < quantity) {
       return res.status(400).json({
         success: false,
-        message: "Not enough stock available",
+        message: "Not enough stock",
       });
     }
 
@@ -48,11 +48,14 @@ router.post("/", async (req, res) => {
       }
 
       existingItem.quantity = newQuantity;
+      existingItem.price = product.price;
+
       await existingItem.save();
 
       return res.status(200).json({
         success: true,
         message: "Cart updated successfully",
+        item: existingItem, // 🔥 IMPORTANT
       });
     }
 
@@ -69,18 +72,10 @@ router.post("/", async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Product added to cart",
+      item: newCartItem,
     });
 
   } catch (error) {
-
-    // ✅ duplicate index error handle
-    if (error.code === 11000) {
-      return res.status(400).json({
-        success: false,
-        message: "Product already in cart",
-      });
-    }
-
     res.status(500).json({
       success: false,
       message: error.message,
@@ -88,11 +83,13 @@ router.post("/", async (req, res) => {
   }
 });
 
+
 // ================= GET USER CART =================
 router.get("/:userId", async (req, res) => {
   try {
     const cartItems = await Cart.find({ userId: req.params.userId })
-      .populate("product");
+      .populate("product")
+      .sort({ createdAt: -1 });
 
     res.status(200).json({
       success: true,
@@ -106,6 +103,7 @@ router.get("/:userId", async (req, res) => {
     });
   }
 });
+
 
 // ================= UPDATE QUANTITY =================
 router.put("/:id", async (req, res) => {
@@ -141,6 +139,7 @@ router.put("/:id", async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Cart updated",
+      item: cartItem, // 🔥 IMPORTANT
     });
 
   } catch (error) {
@@ -151,7 +150,8 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// ================= DELETE CART ITEM =================
+
+// ================= DELETE ITEM =================
 router.delete("/:id", async (req, res) => {
   try {
     const item = await Cart.findByIdAndDelete(req.params.id);
@@ -176,7 +176,8 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// ================= CLEAR USER CART =================
+
+// ================= CLEAR CART =================
 router.delete("/clear/:userId", async (req, res) => {
   try {
     await Cart.deleteMany({ userId: req.params.userId });

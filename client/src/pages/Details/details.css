@@ -1,0 +1,32 @@
+.breadcrumb li {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.breadcrumb li a {
+  text-decoration: none;
+  color: #000;
+}
+
+.breadcrumb li::after {
+  content: ">";
+  margin-left: 10px;
+}
+
+.breadcrumb li:last-child::after {
+  content: "";
+}
+
+.reviewsSection {
+  border-top: 1px solid #eee;
+  padding-top: 20px;
+}
+
+.reviewForm textarea {
+  min-height: 80px;
+}
+
+.reviewItem {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}

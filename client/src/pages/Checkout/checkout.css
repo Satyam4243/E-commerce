@@ -1,0 +1,7 @@
+.checkoutPage textarea{
+    resize: none;
+}
+
+.checkoutPage .card{
+    border-radius: 10px;
+}
